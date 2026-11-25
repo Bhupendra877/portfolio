@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <defs>
+    <radialGradient id="bg" cx=".5" cy=".35" r=".8"><stop offset="0" stop-color="#e9e8ea"/><stop offset="1" stop-color="#a9a8aa"/></radialGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="9"/></filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0"/></filter>
+  </defs>
+  <!-- PLACEHOLDER: drop a real black-and-white photograph at /public/portraits/portrait.jpg and set profile.portrait -->
+  <rect width="400" height="500" fill="url(#bg)"/>
+  <g filter="url(#soft)">
+    <path d="M10 520 C10 410 90 370 200 370 C310 370 390 410 390 520Z" fill="#141313"/>
+    <rect x="168" y="290" width="64" height="90" fill="#5d5c5e"/>
+    <ellipse cx="200" cy="215" rx="72" ry="92" fill="#7a797b"/>
+    <path d="M124 205 C118 120 168 92 204 94 C246 94 288 120 278 205 C268 160 246 144 200 144 C156 144 132 164 124 205Z" fill="#141313"/>
+  </g>
+  <rect width="400" height="500" filter="url(#grain)"/>
+</svg>

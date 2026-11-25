@@ -1,0 +1,106 @@
+.h-section { margin: 0; font-size: clamp(2.8rem, 5.3vw, 76px); font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+.mask-line { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
+.mask-line > span { display: block; will-change: transform; }
+
+/* ---------- HERO ---------- */
+.hero {
+  --hero-image-width: clamp(150px, 34svh, 320px);
+  --hero-image-height: calc(var(--hero-image-width) * 1.15);
+  --hero-image-bottom: 24px;
+  --hero-image-overlap: 28px;
+  position: relative; height: 100svh; min-height: 560px;
+}
+.hero-code-background { position: absolute; z-index: 0; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); overflow: hidden; pointer-events: none; user-select: none; }
+.hero-code-background pre { position: absolute; margin: 0; font-family: var(--font-sans); font-size: 14px; line-height: 1.6; letter-spacing: -.01em; color: var(--ink); white-space: pre; }
+.hero-heading-composition {
+  position: absolute; left: 0; right: 0; z-index: 3;
+  bottom: calc(var(--hero-image-bottom) + var(--hero-image-height) - var(--hero-image-overlap));
+  overflow-x: clip; overflow-clip-margin: 20px;
+}
+.hero-display-title {
+  margin: 0; text-align: center; font-size: min(13vw, 24svh, 184px);
+  letter-spacing: -.035em; font-weight: 700; color: var(--ink);
+}
+.title-line { display: flex; justify-content: center; line-height: .9; }
+.hero-word { position: relative; display: inline-flex; }
+.hero-letter-window { display: inline-flex; perspective: 600px; margin-block: -.12em; padding-block: .12em; overflow: clip; }
+.hero-letter { display: inline-block; line-height: .9; -webkit-text-stroke: .02em currentColor; paint-order: stroke fill; transform-origin: 50% 100%; }
+.hero-code-mark { position: absolute; top: 50%; transform: translateY(-50%); height: clamp(40px, 7vw, 104px); color: var(--ink); pointer-events: none; }
+.hero-code-mark svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.hero-code-open { width: calc(clamp(40px, 7vw, 104px) * .6875); right: calc(100% + clamp(8px, 1.2vw, 18px)); }
+.hero-code-close { width: calc(clamp(40px, 7vw, 104px) * 1.125); left: calc(100% + clamp(8px, 1.2vw, 18px)); }
+.hero-footer { position: absolute; z-index: 4; left: 0; right: 0; bottom: 28px; display: flex; justify-content: space-between; align-items: end; }
+.hero-year { margin: 0; font-size: clamp(40px, 6.8svh, 68px); font-weight: 600; letter-spacing: -.02em; line-height: 1; }
+.hero-focus { margin: 0; padding-bottom: 5px; text-align: right; font-size: clamp(18px, 1.55vw, 24px); font-weight: 500; line-height: 1.3; }
+.hero-focus .caret { display: inline-block; width: 1px; height: 1em; margin-left: 2px; background: currentColor; vertical-align: -.12em; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.hero-portrait-link {
+  position: absolute; z-index: 1; left: calc(50% - var(--hero-image-width) / 2); bottom: var(--hero-image-bottom);
+  width: var(--hero-image-width); aspect-ratio: 20 / 23; border-radius: 9px; overflow: hidden; background: var(--surface-strong); display: block;
+}
+.hero-portrait-link img, .bio-portrait img, .portrait-face img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(1); transition: filter .5s var(--ease); }
+.hero-portrait-link:hover img, .bio-portrait:hover img { filter: grayscale(0); }
+
+/* ---------- ABOUT / portrait journey ---------- */
+.about-section { position: relative; }
+.about-stage { min-height: 100svh; padding-top: 10svh; padding-bottom: 6svh; display: flex; align-items: center; }
+.bio-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 374px) minmax(0, 1fr); gap: 47px; align-items: center; }
+.bio-introduction { display: flex; flex-direction: column; gap: 32px; align-self: start; }
+.bio-introduction h2 { margin: 0; font-size: clamp(44px, 4.7vw, 70px); font-weight: 700; letter-spacing: -.04em; line-height: .98; }
+.bio-role { margin: 0; font-size: clamp(19px, 1.7vw, 26px); font-weight: 700; line-height: 1.15; }
+.bio-role > span { display: block; }
+.bio-current { border-top: 1px solid var(--line); padding-top: 24px; }
+.bio-current > span { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 500; letter-spacing: 0; color: var(--ink-soft); }
+.bio-current p { margin: 0; font-size: 17px; font-weight: 500; line-height: 1.5; }
+.bio-current strong { font-weight: 700; }
+.bio-current p > span { color: var(--ink-soft); }
+.bio-portrait { aspect-ratio: 20 / 23; border-radius: 16px; margin: 0; overflow: hidden; background: var(--surface-strong); }
+.bio-description { display: flex; flex-direction: column; gap: 28px; }
+.bio-lead { margin: 0; text-wrap: pretty; font-size: clamp(22px, 1.9vw, 28px); font-weight: 500; line-height: 1.3; }
+.bio-lead strong { font-weight: 700; }
+.bio-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 52px; padding: 14px 16px; border: 1px solid var(--ink); border-radius: 6px; font-size: 16px; font-weight: 600; transition: background-color .18s, color .18s; }
+.btn-solid { background: var(--ink); color: var(--canvas); }
+.btn-solid:hover { background: var(--ink-soft); }
+
+.portrait-journey { display: none; position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.portrait-sticky-stage { position: sticky; top: 0; height: 100vh; }
+.portrait-card { position: absolute; left: 0; top: 0; transform-style: preserve-3d; pointer-events: auto; will-change: transform; }
+.portrait-face { position: absolute; inset: 0; overflow: hidden; border-radius: 14px; backface-visibility: hidden; background: var(--surface-strong); }
+.portrait-face-back { transform: rotateY(180deg); }
+.portrait-card:hover .portrait-face img { filter: grayscale(0); }
+.portrait-motion-ready .portrait-journey { display: block; }
+.portrait-motion-ready .hero-portrait-link, .portrait-motion-ready .bio-portrait { visibility: hidden; }
+
+@media (max-width: 1023px) {
+  .hero { min-height: 640px; }
+  .bio-grid { grid-template-columns: 1fr; gap: 36px; }
+  .about-stage { padding-top: 40px; display: block; min-height: 0; }
+  .bio-portrait { max-width: 420px; }
+}
+@media (max-width: 640px) {
+  .hero-display-title { font-size: 12.6vw; }
+  .hero-code-mark { height: 9vw; }
+  .hero-code-open { width: 6.2vw; } .hero-code-close { width: 10vw; }
+}
+
+@media (max-width: 1023px) {
+  .hero { --hero-image-bottom: 92px; }
+  .hero-year { font-size: 40px; }
+}
+@media (max-width: 640px) {
+  .hero { --hero-image-bottom: 96px; }
+  .hero-focus { max-width: 52vw; font-size: 14px; }
+  .hero-year { font-size: 34px; }
+}
+
+/* Phones: drop the faint code backdrop so the headline and portrait stay clean */
+@media (max-width: 767px) {
+  .hero-code-background { display: none; }
+}
+
+/* Phones: skip the hero entirely; the page opens on the About section */
+@media (max-width: 767px) {
+  .hero { display: none; }
+  .about-stage { padding-top: 120px; }
+}
