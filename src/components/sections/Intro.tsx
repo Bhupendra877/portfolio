@@ -48,9 +48,15 @@ const CloseMark = () => (
   </svg>
 );
 
-const Img = () => (
+const SRCSET = "/portraits/portrait-2-480.webp 480w, /portraits/portrait-2-760.webp 760w, /portraits/portrait-2-1018.webp 1018w";
+/** Responsive portrait: the browser picks the smallest file that is sharp enough for the slot. */
+const Img = ({ priority = false }: { priority?: boolean }) => (
   // eslint-disable-next-line @next/next/no-img-element
-  <img src={profile.portrait} alt={profile.portraitAlt} width={1018} height={1280} decoding="async" />
+  <img
+    src="/portraits/portrait-2-760.webp"
+    alt={profile.portraitAlt} width={1018} height={1280} decoding="async"
+    loading={priority ? "eager" : "lazy"}
+  />
 );
 
 /** Renders **bold** segments. */
@@ -119,7 +125,7 @@ export default function Intro() {
     // About copy reveal (desktop + mobile)
     gsap.from(all("[data-about-in]"), { y: 36, opacity: 0, duration: 1, stagger: 0.12, ease: "power3.out", scrollTrigger: { trigger: one(".about-stage"), start: "top 55%", once: true } });
     return () => mm.revert();
-  });
+  }, [], { immediate: true });
 
   useMousePosition((nx, ny) => { cx.current?.(nx * -24); cy.current?.(ny * -14); });
 
@@ -144,7 +150,7 @@ export default function Intro() {
           className="hero-portrait-link" href="#about" aria-label="About me"
           onClick={(e) => { e.preventDefault(); scrollToTarget(document.getElementById("about")!.getBoundingClientRect().top + window.scrollY); }}
         >
-          <Img />
+          <Img priority />
         </a>
 
         <div className="hero-footer wrap">
@@ -163,7 +169,7 @@ export default function Intro() {
               <p><strong>{profile.currentEmployment.company}</strong><br />{profile.currentEmployment.role}<br /><span>{profile.location.split(",").slice(0, 2).join(",")}</span></p>
             </div>
           </div>
-          <figure className="bio-portrait"><Img /></figure>
+          <figure className="bio-portrait"><Img priority /></figure>
           <div className="bio-description">
             <p data-about-in className="bio-lead"><Rich text={profile.lead} /></p>
             <div data-about-in className="bio-actions">

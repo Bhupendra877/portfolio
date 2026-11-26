@@ -13,6 +13,7 @@ export const skillGroups: SkillGroup[] = [
       s("JavaScript", "ES6+", "light"), s("C++", "DSA problem solving", "dark"), s("HTML5", "Semantic markup", "dark"),
       s("CSS3", "Layouts & styling", "light"), s("React.js", "Component-driven UIs", "dark"), s("Redux Toolkit", "State management", "light"),
       s("Tailwind CSS", "Utility-first styling", "light"), s("Axios", "Async data fetching", "dark"),
+      s("Next.js", "React framework", "light"), s("TypeScript", "Typed JavaScript", "dark"),
     ],
   },
   {
@@ -23,6 +24,7 @@ export const skillGroups: SkillGroup[] = [
       s("Node.js", "Server-side JavaScript", "dark"), s("Express.js", "REST API framework", "light"), s("REST APIs", "Design & integration", "light"),
       s("JWT Auth", "Token-based authentication", "dark"), s("RBAC", "Role-based access control", "light"), s("Middleware", "Express middleware", "dark"),
       s("MongoDB", "NoSQL database", "light"), s("SQL", "Relational databases", "dark"),
+      s("PostgreSQL", "Relational database", "light"), s("Mongoose", "MongoDB ODM", "dark"), s("Prisma", "Type-safe ORM", "light"),
     ],
   },
   {

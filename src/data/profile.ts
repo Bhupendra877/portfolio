@@ -13,7 +13,7 @@ export const profile = {
   /** Short intro shown beside the portrait. Wrap words in ** ** to bold them. */
   lead: "I build **MERN-stack applications** and **REST APIs**, turning ideas into reliable products.",
   siteUrl: "https://example.com", // TODO: set to your deployed URL
-  portrait: "/portraits/portrait-2.webp",
+  portrait: "/portraits/portrait-2-760.webp",
   portraitAlt: "Portrait of Bhupendra Singh, smiling in a black shirt with arms crossed",
   currentEmployment: {
     role: "Software Development Engineer",

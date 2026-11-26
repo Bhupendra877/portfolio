@@ -7,7 +7,10 @@ import { projects, type Project } from "@/data/projects";
 import { profile } from "@/data/profile";
 import AnimatedText from "@/components/ui/AnimatedText";
 import ProjectFolder from "@/components/interactive/ProjectFolder";
-import ProjectPanel from "@/components/interactive/ProjectPanel";
+import dynamic from "next/dynamic";
+
+// Case-study panel code is only fetched when a folder is opened.
+const ProjectPanel = dynamic(() => import("@/components/interactive/ProjectPanel"), { ssr: false });
 
 export default function FeaturedProjects() {
   const root = useRef<HTMLElement>(null);
