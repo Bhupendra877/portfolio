@@ -4,6 +4,7 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useGSAPAnimation } from "@/hooks/useGSAPAnimation";
 import { profile } from "@/data/profile";
 import Character from "@/components/illustrations/Character";
+import SpiderSuit from "@/components/illustrations/SpiderSuit";
 import { placements, CROWD_ASSETS } from "@/components/illustrations/crowd";
 
 const rand = gsap.utils.random;
@@ -107,7 +108,9 @@ export default function AnimatedCrowd() {
               <div data-drift>
                 <div data-bob style={src ? undefined : { filter: "url(#ink)" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  {src ? <img src={src} alt="" loading="lazy" decoding="async" width={311} height={834} draggable={false} /> : <Character spec={p.spec} />}
+                  {src ? <>
+                    <img src={src} alt="" loading="lazy" decoding="async" width={311} height={834} draggable={false} />
+                  </> : p.suit ? <SpiderSuit suit={p.suit} full={p.spec.full} /> : <Character spec={p.spec} />}
                 </div>
               </div>
             </div>
