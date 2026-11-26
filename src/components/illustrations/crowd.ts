@@ -1,4 +1,5 @@
 import type { CharacterSpec } from "./Character";
+import { suits, type Suit } from "./SpiderSuit";
 
 /** 24 bust characters + 1 featured full-body character. Fully replaceable. */
 export const busts: CharacterSpec[] = [
@@ -40,20 +41,29 @@ export const fullBodies: CharacterSpec[] = [
  * procedural fallback. See ASSETS.md for the full list of required illustrations.
  */
 export const CROWD_ASSETS: Record<string, string> = {
-  hero: "/illustrations/crowd/hero.webp", // the owner's own avatar (centre of the crowd)
+  hero: "/illustrations/crowd/hero-suit.webp", // the owner's own avatar, in a web-slinger suit (mask peels off on scroll)
 };
 
-export type Placement = { id: string; spec: CharacterSpec; left: number; bottom: number; width: number; depth: number; row: "back" | "mid" | "front" | "hero"; peek?: boolean };
+export type Placement = { id: string; spec: CharacterSpec; suit?: Suit; left: number; bottom: number; width: number; depth: number; row: "back" | "mid" | "front" | "hero"; peek?: boolean };
 
 // Denser composition (left/bottom/width are % of the stage). Back and mid rows overlap; front row is cropped by the bottom edge.
 const back = Array.from({ length: 17 }, (_, i): Placement => ({ id: `b${i}`, spec: busts[i % busts.length], left: -3 + i * 6.3, bottom: 46 + (i % 3) * 3.5, width: 8.2, depth: 0.3, row: "back", peek: i % 5 === 1 }));
 const mid = Array.from({ length: 12 }, (_, i): Placement => ({ id: `m${i}`, spec: busts[(i + 9) % busts.length], left: -2 + i * 9, bottom: 25 + (i % 2) * 5, width: 11, depth: 0.6, row: "mid", peek: i === 2 || i === 8 }));
 const front = [-3, 8.5, 21, 33.5, 56, 68, 80.5, 92].map((left, i): Placement => ({ id: `f${i}`, spec: busts[(i + 14) % busts.length], left, bottom: -14 - (i % 2) * 5, width: 13.5, depth: 1, row: "front" }));
 
-export const placements: Placement[] = [
+const basePlacements: Placement[] = [
   ...back, ...mid, ...front,
   { id: "fb0", spec: fullBodies[0], left: 16, bottom: -1, width: 7, depth: 0.8, row: "mid" },
   { id: "fb1", spec: fullBodies[1], left: 76, bottom: -1, width: 7, depth: 0.8, row: "mid" },
   // featured central full-body character (mostly black clothing)
   { id: "hero", spec: featured, left: 44.75, bottom: -1.5, width: 10.5, depth: 0.9, row: "hero" },
 ];
+
+/** Masked web-slinger variants mixed into the crowd (original suit designs). */
+const SUITED: Record<string, keyof typeof suits> = {
+  f1: "classic", f3: "midnight", f5: "ghost", f6: "future",
+  m1: "scarlet", m4: "noir", m7: "shadow", m10: "classic",
+  b2: "midnight", b6: "ghost", b9: "future", b14: "scarlet",
+  fb0: "classic", fb1: "midnight",
+};
+export const placements: Placement[] = basePlacements.map((p) => (SUITED[p.id] ? { ...p, suit: suits[SUITED[p.id]] } : p));

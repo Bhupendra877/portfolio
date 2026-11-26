@@ -3,6 +3,7 @@ import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { profile } from "@/data/profile";
 import { scrollToTarget } from "@/lib/scroll";
 import dynamic from "next/dynamic";
+import { WebDecor } from "@/components/ui/WebDecor";
 import LazyMount from "@/components/ui/LazyMount";
 
 // The illustrated crowd is heavy (dozens of SVGs + animation timelines): load it only near the footer.
@@ -27,6 +28,7 @@ export default function Footer() {
   };
   return (
     <footer className="site-footer" aria-label="Footer">
+      <WebDecor className="web-tr" />
       <div className="wrap footer-top">
         <div className="footer-identity">
           <h2>{profile.displayName}.</h2>

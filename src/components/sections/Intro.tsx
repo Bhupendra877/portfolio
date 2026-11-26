@@ -8,6 +8,7 @@ import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { skillGroups } from "@/data/skills";
 import { scrollToTarget } from "@/lib/scroll";
+import { WebDecor, HangingSpider } from "@/components/ui/WebDecor";
 
 /** Faint "source code" backdrop assembled from the real profile data. */
 const codeCols = (() => {
@@ -118,11 +119,18 @@ export default function Intro() {
         },
         { x: () => target().x, y: () => target().y, scale: 1, rotationY: -180, duration: 1 },
         0,
-      ).fromTo(faces, { borderRadius: 14 }, { borderRadius: 16, duration: 1, ease: "none" }, 0);
+      ).fromTo(faces, { borderRadius: 14 }, { borderRadius: 16, duration: 1, ease: "none" }, 0)
+        // colour floods in as the portrait settles into the About column (reverses on scroll-up)
+        .fromTo(card.querySelectorAll("img"), { filter: "grayscale(1)" }, { filter: "grayscale(0)", duration: 0.3, ease: "power1.out" }, 0.7);
       return () => el.classList.remove("portrait-motion-ready");
     });
 
     // About copy reveal (desktop + mobile)
+    // phones/tablets (no flying card): colour the About portrait as it scrolls into view
+    mm.add("(max-width: 1023px)", () => {
+      gsap.fromTo(one(".bio-portrait img"), { filter: "grayscale(1)" }, { filter: "grayscale(0)", ease: "none", scrollTrigger: { trigger: one(".bio-portrait"), start: "top 85%", end: "top 40%", scrub: true } });
+    });
+
     gsap.from(all("[data-about-in]"), { y: 36, opacity: 0, duration: 1, stagger: 0.12, ease: "power3.out", scrollTrigger: { trigger: one(".about-stage"), start: "top 55%", once: true } });
     return () => mm.revert();
   }, [], { immediate: true });
@@ -133,6 +141,9 @@ export default function Intro() {
   return (
     <section id="home" ref={root} className="about-section">
       <div className="hero">
+        <WebDecor className="web-tl" />
+        <WebDecor className="web-br" />
+        <HangingSpider />
         <div ref={code} className="hero-code-background" aria-hidden>
           {codeCols.map((lines, i) => (
             <pre key={i} style={{ left: `${[2, 36, 70][i]}vw`, top: `${[2, 9, 5][i]}%`, opacity: [0.17, 0.12, 0.15][i] }}>{lines.join("\n")}</pre>
