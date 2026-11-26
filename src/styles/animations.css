@@ -31,3 +31,14 @@
 .nav-panel-socials a { display: grid; place-items: center; width: 48px; height: 48px; color: #fafafa; background: #111; border-radius: 50%; transition: transform .18s var(--ease); }
 .nav-panel-socials a:hover { transform: translateY(-3px); }
 .nav-dialog :focus-visible { outline: 2px solid #111; outline-offset: 5px; border-radius: 4px; }
+
+/* Menu on narrow screens: shrink type/padding so nothing scrolls sideways */
+.nav-panel { overflow-x: hidden; }
+.nav-menu-primary a { font-size: clamp(40px, min(9svh, 15vw), 88px); }
+.nav-panel-email { overflow-wrap: anywhere; min-width: 0; }
+@media (max-width: 560px) {
+  .nav-dialog { inset: 12px 12px auto 12px; width: auto; height: calc(100dvh - 24px); border-radius: 20px; }
+  .nav-panel { padding: 18px 22px 22px; }
+  .nav-close-circle { width: 48px; height: 48px; }
+  .nav-panel-email { font-size: 14px; }
+}

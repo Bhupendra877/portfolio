@@ -2,7 +2,14 @@
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { profile } from "@/data/profile";
 import { scrollToTarget } from "@/lib/scroll";
-import AnimatedCrowd from "@/components/interactive/AnimatedCrowd";
+import dynamic from "next/dynamic";
+import LazyMount from "@/components/ui/LazyMount";
+
+// The illustrated crowd is heavy (dozens of SVGs + animation timelines): load it only near the footer.
+const AnimatedCrowd = dynamic(() => import("@/components/interactive/AnimatedCrowd"), {
+  ssr: false,
+  loading: () => <div className="footer-crowd-scene" aria-hidden />,
+});
 
 const explore = [
   { id: "about", label: "About" }, { id: "skills", label: "Skills" }, { id: "projects", label: "Projects" },
@@ -43,7 +50,7 @@ export default function Footer() {
           <p>See you around.</p>
           <button onClick={() => scrollToTarget(0)}>Back to top <ArrowUp size={14} /></button>
         </div>
-        <AnimatedCrowd />
+        <LazyMount placeholder={<div className="footer-crowd-scene" aria-hidden />}><AnimatedCrowd /></LazyMount>
         <div className="wrap footer-scene-bottom"><small>Designed and built by {profile.displayName}.</small></div>
       </div>
     </footer>

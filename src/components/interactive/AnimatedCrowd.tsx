@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useGSAPAnimation } from "@/hooks/useGSAPAnimation";
 import { profile } from "@/data/profile";
@@ -11,6 +11,15 @@ const order = { back: 0, mid: 1, hero: 2, front: 3 } as const;
 
 export default function AnimatedCrowd() {
   const scene = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scene.current!;
+    const set = () => el.style.setProperty("--scene-h", `${el.clientHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   useGSAPAnimation(scene, () => {
     const el = scene.current!;
@@ -91,11 +100,14 @@ export default function AnimatedCrowd() {
           const src = CROWD_ASSETS[p.id];
           return (
             <div key={p.id} data-char data-depth={p.depth} data-hero={p.row === "hero" ? 1 : 0} data-peek={p.peek ? 1 : 0} className="crowd-char"
-              style={{ left: `${p.left}%`, bottom: `${p.bottom}%`, width: `${p.width}%` }}>
+              style={p.row === "hero"
+                // the avatar is also capped by the scene height (0.35 × height ≈ 94% tall), and stays centred
+                ? { left: "50%", bottom: `${p.bottom}%`, width: `min(${p.width}%, calc(var(--scene-h, 9999px) * .35))`, marginLeft: `calc(min(${p.width}%, calc(var(--scene-h, 9999px) * .35)) / -2)` }
+                : { left: `${p.left}%`, bottom: `${p.bottom}%`, width: `${p.width}%` }}>
               <div data-drift>
                 <div data-bob style={src ? undefined : { filter: "url(#ink)" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  {src ? <img src={src} alt="" loading="lazy" draggable={false} /> : <Character spec={p.spec} />}
+                  {src ? <img src={src} alt="" loading="lazy" decoding="async" width={311} height={834} draggable={false} /> : <Character spec={p.spec} />}
                 </div>
               </div>
             </div>
