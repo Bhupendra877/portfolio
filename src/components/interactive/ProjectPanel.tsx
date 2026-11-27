@@ -5,6 +5,7 @@ import { gsap } from "@/lib/gsap";
 import type { Project } from "@/data/projects";
 import { prefersReducedMotion } from "@/hooks/useReducedMotion";
 import { scrollToTarget } from "@/lib/scroll";
+import { MOTION, ensureMotionEase } from "@/lib/motion";
 
 /** Inline case-study panel: sticky overview on the left, narrative sections on the right. */
 export default function ProjectPanel({ project, onClose }: { project: Project; onClose: () => void }) {
@@ -15,7 +16,8 @@ export default function ProjectPanel({ project, onClose }: { project: Project; o
     // context + explicit end values keep this safe under React StrictMode's double effect run
     const ctx = gsap.context(() => {
       if (!prefersReducedMotion()) {
-        gsap.fromTo(el.querySelectorAll("[data-in]"), { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, stagger: 0.07, ease: "power3.out", clearProps: "opacity,transform" });
+        ensureMotionEase();
+        gsap.fromTo(el.querySelectorAll("[data-in]"), { y: MOTION.y, opacity: 0 }, { y: 0, opacity: 1, duration: MOTION.duration, stagger: MOTION.stagger, ease: MOTION.ease, clearProps: "opacity,transform" });
       }
     }, el);
     scrollToTarget(el.getBoundingClientRect().top + window.scrollY - 110);

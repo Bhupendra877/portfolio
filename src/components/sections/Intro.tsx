@@ -9,6 +9,8 @@ import { projects } from "@/data/projects";
 import { skillGroups } from "@/data/skills";
 import { scrollToTarget } from "@/lib/scroll";
 import { WebDecor, HangingSpider } from "@/components/ui/WebDecor";
+import { MOTION, ensureMotionEase } from "@/lib/motion";
+import { reveal } from "@/components/ui/Reveal";
 
 /** Faint "source code" backdrop assembled from the real profile data. */
 const codeCols = (() => {
@@ -76,13 +78,15 @@ export default function Intro() {
     const one = <T extends HTMLElement>(s: string) => el.querySelector<T>(s)!;
     const all = (s: string) => el.querySelectorAll<HTMLElement>(s);
 
-    // Hero entrance: letters rise out of their windows, metadata + code fade in.
-    const intro = gsap.timeline({ delay: 0.15 });
+    // Hero entrance on load: letters rise out of their windows, then the portrait, metadata and code settle in.
+    ensureMotionEase();
+    const intro = gsap.timeline({ delay: 0.1 });
     intro
       .from(all(".hero-letter"), { yPercent: 105, rotationX: -80, duration: 1.1, ease: "power4.out", stagger: { each: 0.035, from: "start" } })
-      .from(all(".hero-code-mark"), { opacity: 0, scale: 0.7, duration: 0.8, ease: "power3.out" }, 0.7)
-      .from(all("[data-meta]"), { y: 18, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }, 0.7)
-      .from(code.current, { opacity: 0, duration: 1.6, ease: "power2.out" }, 0.2);
+      .from(all(".hero-code-mark"), { opacity: 0, scale: 0.85, duration: MOTION.duration, ease: MOTION.ease }, 0.6)
+      .from(all(".hero-portrait-link img, .portrait-face-front img"), { opacity: 0, duration: 0.9, ease: MOTION.ease }, 0.45)
+      .from(all("[data-meta]"), { y: MOTION.y, opacity: 0, duration: MOTION.duration, stagger: MOTION.stagger, ease: MOTION.ease }, 0.7)
+      .from(code.current, { opacity: 0, duration: 1.4, ease: "power2.out" }, 0.2);
 
     cx.current = gsap.quickTo(code.current, "x", { duration: 1.2, ease: "power3.out" });
     cy.current = gsap.quickTo(code.current, "y", { duration: 1.2, ease: "power3.out" });
@@ -125,13 +129,11 @@ export default function Intro() {
       return () => el.classList.remove("portrait-motion-ready");
     });
 
-    // About copy reveal (desktop + mobile)
+    // About copy reveals through the shared system (data-reveal); the right column trails the left slightly
     // phones/tablets (no flying card): colour the About portrait as it scrolls into view
     mm.add("(max-width: 1023px)", () => {
       gsap.fromTo(one(".bio-portrait img"), { filter: "grayscale(1)" }, { filter: "grayscale(0)", ease: "none", scrollTrigger: { trigger: one(".bio-portrait"), start: "top 85%", end: "top 40%", scrub: true } });
     });
-
-    gsap.from(all("[data-about-in]"), { y: 36, opacity: 0, duration: 1, stagger: 0.12, ease: "power3.out", scrollTrigger: { trigger: one(".about-stage"), start: "top 55%", once: true } });
     return () => mm.revert();
   }, [], { immediate: true });
 
@@ -173,17 +175,17 @@ export default function Intro() {
       <div id="about" className="about-stage">
         <div className="wrap bio-grid">
           <div className="bio-introduction">
-            <h2 data-about-in>Hi, I&apos;m<br />{profile.nameLines[0]}<br />{profile.nameLines[1]}</h2>
-            <p data-about-in className="bio-role"><span>{profile.designationLines[0]}</span><span>{profile.designationLines[1]}</span></p>
-            <div data-about-in className="bio-current">
+            <h2 {...reveal()}>Hi, I&apos;m<br />{profile.nameLines[0]}<br />{profile.nameLines[1]}</h2>
+            <p {...reveal()} className="bio-role"><span>{profile.designationLines[0]}</span><span>{profile.designationLines[1]}</span></p>
+            <div {...reveal()} className="bio-current">
               <span>Currently at</span>
               <p><strong>{profile.currentEmployment.company}</strong><br />{profile.currentEmployment.role}<br /><span>{profile.location.split(",").slice(0, 2).join(",")}</span></p>
             </div>
           </div>
           <figure className="bio-portrait"><Img priority /></figure>
           <div className="bio-description">
-            <p data-about-in className="bio-lead"><Rich text={profile.lead} /></p>
-            <div data-about-in className="bio-actions">
+            <p {...reveal(0.12)} className="bio-lead"><Rich text={profile.lead} /></p>
+            <div {...reveal(0.12)} className="bio-actions">
               <a className="btn btn-solid" href="#projects" onClick={(e) => { e.preventDefault(); scrollToTarget("#projects"); }}>Explore projects <ArrowUpRight size={16} /></a>
             </div>
           </div>

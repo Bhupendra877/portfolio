@@ -5,6 +5,7 @@ import { scrollToTarget } from "@/lib/scroll";
 import dynamic from "next/dynamic";
 import { WebDecor } from "@/components/ui/WebDecor";
 import LazyMount from "@/components/ui/LazyMount";
+import { reveal, revealChildren } from "@/components/ui/Reveal";
 
 // The illustrated crowd is heavy (dozens of SVGs + animation timelines): load it only near the footer.
 const AnimatedCrowd = dynamic(() => import("@/components/interactive/AnimatedCrowd"), {
@@ -29,7 +30,7 @@ export default function Footer() {
   return (
     <footer className="site-footer" aria-label="Footer">
       <WebDecor className="web-tr" />
-      <div className="wrap footer-top">
+      <div className="wrap footer-top" {...revealChildren()}>
         <div className="footer-identity">
           <h2>{profile.displayName}.</h2>
           <p>{profile.designationLines[0]} &amp;<br />Full-Stack Developer.</p>
@@ -48,12 +49,12 @@ export default function Footer() {
       </div>
 
       <div className="wrap footer-finale" style={{ width: "100%", maxWidth: "none", paddingInline: 0 }}>
-        <div className="wrap footer-finale-heading">
+        <div className="wrap footer-finale-heading" {...revealChildren()}>
           <p>See you around.</p>
           <button onClick={() => scrollToTarget(0)}>Back to top <ArrowUp size={14} /></button>
         </div>
         <LazyMount placeholder={<div className="footer-crowd-scene" aria-hidden />}><AnimatedCrowd /></LazyMount>
-        <div className="wrap footer-scene-bottom"><small>Designed and built by {profile.displayName}.</small></div>
+        <div className="wrap footer-scene-bottom"><small {...reveal()}>Designed and built by {profile.displayName}.</small></div>
       </div>
     </footer>
   );

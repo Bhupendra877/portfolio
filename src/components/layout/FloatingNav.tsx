@@ -100,8 +100,8 @@ export default function FloatingNav() {
           <div ref={panel} className="nav-dialog" role="dialog" aria-modal="true" aria-label="Menu">
             <div className="nav-panel">
               <div className="nav-panel-top">
-                <button data-close className="nav-panel-close" onClick={() => hide()}>
-                  close <span className="nav-close-circle"><X size={22} /></span>
+                <button data-close className="nav-panel-close" onClick={() => hide()} aria-label="Close menu">
+                  <span className="nav-close-circle"><X size={22} /></span>
                 </button>
               </div>
               <nav className="nav-panel-links" aria-label="Primary">
