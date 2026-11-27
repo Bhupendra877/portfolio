@@ -1,19 +1,27 @@
-"use client";
-import { useRef, type ReactNode } from "react";
-import { gsap } from "@/lib/gsap";
-import { useGSAPAnimation } from "@/hooks/useGSAPAnimation";
+import { createElement, type ElementType, type HTMLAttributes, type ReactNode } from "react";
 
-type Props = { children: ReactNode; className?: string; delay?: number; y?: number; stagger?: number; children_selector?: string };
+/**
+ * Declarative hooks into the site-wide reveal system (see hooks/useRevealSystem).
+ * They only add data attributes, so they render identical markup on the server and the client and
+ * never change layout. Prefer spreading the helpers onto existing elements over adding wrappers.
+ */
 
-/** Fades/slides content up when it enters the viewport. */
-export default function Reveal({ children, className, delay = 0, y = 40, stagger = 0.1, children_selector }: Props) {
-  const ref = useRef<HTMLDivElement>(null);
-  useGSAPAnimation(ref, () => {
-    const targets = children_selector ? ref.current!.querySelectorAll(children_selector) : ref.current;
-    gsap.from(targets, {
-      y, opacity: 0, duration: 1, delay, stagger, ease: "power3.out",
-      scrollTrigger: { trigger: ref.current, start: "top 88%", once: true },
-    });
-  });
-  return <div ref={ref} className={className}>{children}</div>;
+/** Mark an element to fade/rise in on scroll. `delay` (s) offsets it, e.g. for the second column of a pair. */
+export const reveal = (delay?: number) => ({ "data-reveal": "", ...(delay ? { "data-reveal-delay": String(delay) } : {}) });
+
+/** Mark a container whose direct children reveal one after another (grids, lists, form fields). */
+export const revealChildren = (delay?: number) => ({ "data-reveal-children": "", ...(delay ? { "data-reveal-delay": String(delay) } : {}) });
+
+type Props = HTMLAttributes<HTMLElement> & { as?: ElementType; delay?: number; children?: ReactNode };
+
+/** <Reveal as="p">…</Reveal>: an element that reveals itself. */
+export function Reveal({ as = "div", delay, ...rest }: Props) {
+  return createElement(as, { ...reveal(delay), ...rest });
 }
+
+/** <StaggerContainer as="ul">…</StaggerContainer>: children reveal in sequence. */
+export function StaggerContainer({ as = "div", delay, ...rest }: Props) {
+  return createElement(as, { ...revealChildren(delay), ...rest });
+}
+
+export default Reveal;

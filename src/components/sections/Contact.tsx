@@ -1,23 +1,17 @@
 "use client";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ArrowUpRight, Copy, Check } from "lucide-react";
-import { gsap } from "@/lib/gsap";
-import { useGSAPAnimation } from "@/hooks/useGSAPAnimation";
 import { profile } from "@/data/profile";
 import AnimatedText from "@/components/ui/AnimatedText";
 import { socialIcon } from "@/components/ui/Icons";
+import { reveal, revealChildren } from "@/components/ui/Reveal";
 
 type Errors = Partial<Record<"name" | "email" | "topic", string>>;
 
 export default function Contact() {
-  const root = useRef<HTMLElement>(null);
   const [copied, setCopied] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [done, setDone] = useState(false);
-
-  useGSAPAnimation(root, () => {
-    gsap.from(root.current!.querySelectorAll("[data-in]"), { y: 28, opacity: 0, duration: 0.9, stagger: 0.08, ease: "power3.out", scrollTrigger: { trigger: root.current, start: "top 75%", once: true } });
-  });
 
   const copy = async () => {
     try { await navigator.clipboard.writeText(profile.email); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard unavailable */ }
@@ -43,12 +37,12 @@ export default function Contact() {
   const err = (k: keyof Errors) => errors[k] && <p id={`${k}-err`} role="alert" className="field-error">{errors[k]}</p>;
 
   return (
-    <section id="contact" ref={root} className="contact-section wrap">
+    <section id="contact" className="contact-section wrap">
       <div className="contact-layout">
         <div className="contact-opening">
           <AnimatedText lines={["Let’s talk."]} className="" as="h2" />
-          <p data-in>Whether it&apos;s a full-time role or a freelance project, my inbox is open.</p>
-          <div className="contact-details" data-in>
+          <p {...reveal()}>Whether it&apos;s a full-time role or a freelance project, my inbox is open.</p>
+          <div className="contact-details" {...reveal()}>
             <div className="contact-email-row">
               <a className="contact-email" href={`mailto:${profile.email}`}>{profile.email}<ArrowUpRight size={16} /></a>
               <button className="copy-btn" onClick={copy} aria-label="Copy email address">{copied ? <Check size={16} /> : <Copy size={16} />}</button>
@@ -60,7 +54,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <form onSubmit={submit} noValidate className="contact-form" aria-label="Contact form" data-in>
+        <form onSubmit={submit} noValidate className="contact-form" aria-label="Contact form" {...revealChildren(0.15)}>
           <div className="contact-field">
             <label htmlFor="name">Your name</label>
             <input id="name" name="name" autoComplete="name" placeholder="What should I call you?" aria-invalid={!!errors.name} aria-describedby={errors.name ? "name-err" : undefined} />
